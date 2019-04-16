@@ -11,9 +11,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
   test "invalid signup information" do
     post v1_user_registration_path
-  	post v1_user_registration_path, params: { user: { 
-                                     email: "user@invalid",
-                                     password:              "foo",
-                                     password_confirmation: "bar" } }
+  	post v1_user_registration_path, params: { email: "user@invalid", password: "foo", password_confirmation: "bar" }
   end
+
 end
