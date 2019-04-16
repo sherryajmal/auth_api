@@ -11,9 +11,9 @@ class V1::Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    @user = User.new(configure_sign_up_params)
+    @user = User.new(email: params[:email], password: params[:password])
     if @user.save!
-      data = @user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at, :confirmation])
+      data = @user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at])
       data.merge!(message: "User has been successfully created please confirm your email")
       render json: data, status: :created
     else
@@ -48,9 +48,9 @@ class V1::Users::RegistrationsController < Devise::RegistrationsController
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_up_params
-    params.require(:user).permit(:email, :password)
-  end
+  # def configure_sign_up_params
+  #  params.require(:user).permit(:email, :password)
+  # end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params

@@ -13,7 +13,21 @@ class V1::Users::ConfirmationsController < Devise::ConfirmationsController
 
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
-    super
+    user = User.find_by_confirmation_token(params[:confirmation_token])
+    if user.present?
+      if user.confirmed_at.blank?
+        user.update(confirmed_at: Time.now)
+        data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at])
+        data.merge!(message: "User has been successfully confirmed their email")
+        render json: data, status: :confirmed
+      else
+        data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at])
+        data.merge!(message: "User has already confirmed their email")
+        render json: data, status: :already_confirmed
+      end
+    else
+      render json: {message: "invalid confirmation token or expired confirmation token "}, status: :error
+    end
   end
 
   # protected

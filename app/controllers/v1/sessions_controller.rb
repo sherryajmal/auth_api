@@ -1,4 +1,5 @@
 class V1::SessionsController < ApplicationController
+  
   def create
     user = User.find_by_email(params[:email])
     if user.valid_password?(params[:password]) && user.confirmed_at.present?
