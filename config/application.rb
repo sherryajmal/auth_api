@@ -19,6 +19,8 @@ Bundler.require(*Rails.groups)
 
 module RailsApi
   class Application < Rails::Application
+    initializer(:remove_activestorage_routes, after: :add_routing_paths) {|app|
+      app.routes_reloader.paths.delete_if {|path| path =~ /activestorage/}}
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 

@@ -3,7 +3,10 @@ class V1::SessionsController < ApplicationController
   def create
     user = User.find_by_email(params[:email])
     if user.valid_password?(params[:password]) && user.confirmed_at.present?
-      render json: {message: "User authenticated successfully"}, status: :ok
+      user.update(authentication_token: Devise.friendly_token)
+      data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at, :authentication_token])
+      data.merge!(message: "User authenticated successfully")
+      render json: data, status: :authenticated
     else
       render json: {message: "User is not authenticated"}, status: :error
     end
