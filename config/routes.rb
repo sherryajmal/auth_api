@@ -6,7 +6,12 @@ Rails.application.routes.draw do
       post 'users', to: 'users/registrations#create'
       get  'users/confirmation', to: 'users/confirmations#show'
     end
-  	resources :sessions, only: [:create, :destroy, :update]
+  	resources :sessions, only: [:create, :show] do
+      collection do
+        patch :update_profile
+        delete :sign_out
+      end
+    end
   end
   
 end

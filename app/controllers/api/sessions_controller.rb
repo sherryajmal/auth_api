@@ -12,23 +12,30 @@ class Api::SessionsController < ApplicationController
     end
   end
 
-  # DELETE /resource/sign_out
-  def destroy
+  def show
     user = User.find params[:id]
+    data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at, :authentication_token])
+    render json: data, status: :authenticated
+  end
+
+  # DELETE /resource/sign_out
+  def sign_out
+    user = User.find_by(authentication_token: params[:confirmation_token])
     if user.update(authentication_token: nil)
-      head(:ok)
+      render json: {message: "user successfully logged out"}
     else
       head(:unauthorized)
     end
   end
 
-  def update
-    @user = User.find params[:id]
+  def update_profile
+    debugger
+    @user = User.find_by(authentication_token: params[:confirmation_token])
     if @user.valid_password?(params[:old_password])
        @user.email = params[:email] if params[:email].present?
        @user.password =  params[:new_password]
       if @user.save!
-        render json: {message: "password updated"}
+        render json: {message: "Profile updated"}
       else
         head(:unprocessable_entity)
       end

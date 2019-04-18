@@ -18,11 +18,11 @@ class Api::Users::ConfirmationsController < Devise::ConfirmationsController
       if user.confirmed_at.blank?
         user.update(confirmed_at: Time.now)
         data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at])
-        data.merge!(message: "User has been successfully confirmed their email")
+        data.merge!(message: "User has successfully confirmed his email")
         render json: data, status: :confirmed
       else
         data = user.as_json(only: [:id, :email, :confirmed_at, :created_at, :updated_at])
-        data.merge!(message: "User has already confirmed their email")
+        data.merge!(message: "User has already confirmed his email")
         render json: data, status: :already_confirmed
       end
     else
