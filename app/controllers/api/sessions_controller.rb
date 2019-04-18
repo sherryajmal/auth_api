@@ -20,7 +20,7 @@ class Api::SessionsController < ApplicationController
 
   # DELETE /resource/sign_out
   def sign_out
-    user = User.find_by(authentication_token: params[:confirmation_token])
+    user = User.find_by(authentication_token: params[:authentication_token])
     if user.update(authentication_token: nil)
       render json: {message: "user successfully logged out"}
     else
@@ -29,8 +29,7 @@ class Api::SessionsController < ApplicationController
   end
 
   def update_profile
-    debugger
-    @user = User.find_by(authentication_token: params[:confirmation_token])
+    @user = User.find_by(authentication_token: params[:authentication_token])
     if @user.valid_password?(params[:old_password])
        @user.email = params[:email] if params[:email].present?
        @user.password =  params[:new_password]
