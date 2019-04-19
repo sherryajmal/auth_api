@@ -10,8 +10,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "invalid signup information" do
-    post api_users_path
-  	post api_users_path, params: { email: "user@invalid", password: "foo", password_confirmation: "bar" }
+    post api_v1_users_path
+  	post api_v1_users_path, params: { email: "user@invalid", password: "foo", password_confirmation: "bar" }
   end
 
 end
